@@ -196,10 +196,7 @@ Course* loadCourses(int& count) {
     return courses;
 }
  
-int gitest()
-{
-    
-}
+
 
 int main() {
     
