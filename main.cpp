@@ -459,6 +459,72 @@ bool loginUser() {
 }
 
 
+//admin stuff
+
+void addCourse() {
+    Course newCourse;
+    
+    cout << "\n=== ADD COURSE ===\n";
+    cout << "Enter course code: ";
+    cin >> newCourse.courseCode;
+    
+    if (courseExists(newCourse.courseCode)) {
+        cout << "✗ Course already exists!\n";
+        return;
+    }
+    
+    cin.ignore();
+    cout << "Enter course name: ";
+    getline(cin, newCourse.courseName);
+    
+    cout << "Enter number of instructors: ";
+    cin >> newCourse.instructorCount;
+    
+    newCourse.instructorIDs = new int[newCourse.instructorCount];
+    
+    for (int i = 0; i < newCourse.instructorCount; i++) {
+        cout << "Enter instructor ID " << (i + 1) << ": ";
+        cin >> newCourse.instructorIDs[i];
+        
+        if (!userExists(newCourse.instructorIDs[i])) {
+            cout << "Warning: Instructor ID " << newCourse.instructorIDs[i] << " does not exist!\n";
+        }
+    }
+    
+    int count;
+    Course* courses = loadCourses(count);
+    
+    Course* newCourses = new Course[count + 1];
+    
+    for (int i = 0; i < count; i++) {
+        newCourses[i].courseCode = courses[i].courseCode;
+        newCourses[i].courseName = courses[i].courseName;
+        newCourses[i].instructorCount = courses[i].instructorCount;
+        
+        if (courses[i].instructorCount > 0) {
+            newCourses[i].instructorIDs = new int[courses[i].instructorCount];
+            for (int k = 0; k < courses[i].instructorCount; k++) {
+                newCourses[i].instructorIDs[k] = courses[i].instructorIDs[k];
+            }
+        }
+    }
+    
+    newCourses[count].courseCode = newCourse.courseCode;
+    newCourses[count].courseName = newCourse.courseName;
+    newCourses[count].instructorCount = newCourse.instructorCount;
+    newCourses[count].instructorIDs = new int[newCourse.instructorCount];
+    for (int k = 0; k < newCourse.instructorCount; k++) {
+        newCourses[count].instructorIDs[k] = newCourse.instructorIDs[k];
+    }
+    
+    saveCourses(newCourses, count + 1);
+    
+    if (courses != nullptr) delete[] courses;
+    delete[] newCourses;
+    
+    cout << "✓ Course added successfully!\n";
+}
+
 
 int main() {
     
