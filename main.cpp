@@ -218,6 +218,248 @@ void saveCourses(Course* courses, int count) {
     file.close();
 }
 
+//grade file manip
+
+Grade* loadGrades(int& count) {
+    ifstream file(GRADES_FILE);
+    count = 0;
+    
+    if (!file.is_open()) {
+        ofstream newFile(GRADES_FILE);
+        newFile << "[]";
+        newFile.close();
+        return nullptr;
+    }
+    
+    json j;
+    try {
+        file >> j;
+    } catch (...) {
+        file.close();
+        return nullptr;
+    }
+    file.close();
+    
+    count = j.size();
+    if (count == 0) return nullptr;
+    
+    Grade* grades = new Grade[count];
+    
+    for (int i = 0; i < count; i++) {
+        grades[i].courseCode = j[i]["courseCode"];
+        grades[i].studentID = j[i]["studentID"];
+        grades[i].instructorID = j[i]["instructorID"];
+        grades[i].grade = j[i]["grade"];
+    }
+    
+    return grades;
+}
+
+
+void saveGrades(Grade* grades, int count) {
+    json j = json::array();
+    
+    for (int i = 0; i < count; i++) {
+        json gradeObj;
+        gradeObj["courseCode"] = grades[i].courseCode;
+        gradeObj["studentID"] = grades[i].studentID;
+        gradeObj["instructorID"] = grades[i].instructorID;
+        gradeObj["grade"] = grades[i].grade;
+        j.push_back(gradeObj);
+    }
+    
+    ofstream file(GRADES_FILE);
+    file << j.dump(4);
+    file.close();
+}
+
+
+// exists ?
+
+
+bool userExists(int id) {
+    int count;
+    User* users = loadUsers(count);
+    
+    if (users == nullptr) return false;
+    
+    for (int i = 0; i < count; i++) {
+        if (users[i].id == id) {
+            delete[] users;
+            return true;
+        }
+    }
+    
+    delete[] users;
+    return false;
+}
+
+
+bool courseExists(const string& courseCode) {
+    int count;
+    Course* courses = loadCourses(count);
+    
+    if (courses == nullptr) return false;
+    
+    for (int i = 0; i < count; i++) {
+        if (courses[i].courseCode == courseCode) {
+            delete[] courses;
+            return true;
+        }
+    }
+    
+    delete[] courses;
+    return false;
+}
+
+
+//course name
+
+string getCourseNameByCode(const string& courseCode) {
+    int count;
+    Course* courses = loadCourses(count);
+    
+    if (courses == nullptr) return "";
+    
+    for (int i = 0; i < count; i++) {
+        if (courses[i].courseCode == courseCode) {
+            string name = courses[i].courseName;
+            delete[] courses;
+            return name;
+        }
+    }
+    
+    delete[] courses;
+    return "";
+}
+
+
+//registration and login
+
+void registerUser() {
+    User newUser;
+    
+    cout << "\n=== USER REGISTRATION ===\n";
+    
+    cout << "Enter first name: ";
+    cin >> newUser.firstName;
+    
+    cout << "Enter last name: ";
+    cin >> newUser.lastName;
+    
+    string password;
+    do {
+        cout << "Enter password (min 8 chars, must include numbers, letters, and special characters): ";
+        cin >> password;
+        
+        if (!isValidPassword(password)) {
+            cout << "Invalid password! Please try again.\n";
+        } else {
+            break;
+        }
+    } while (true);
+    newUser.password = hashPassword(password);
+    
+    do {
+        cout << "Enter email: ";
+        cin >> newUser.email;
+        
+        if (!isValidEmail(newUser.email)) {
+            cout << "Invalid email format! Please try again.\n";
+        } else {
+            break;
+        }
+    } while (true);
+    
+    cin.ignore();
+    do {
+        cout << "Enter phone number: ";
+        getline(cin, newUser.phone);
+        
+        if (!isValidPhone(newUser.phone)) {
+            cout << "Invalid phone format! Please try again.\n";
+        } else {
+            break;
+        }
+    } while (true);
+    
+    int roleChoice;
+    cout << "\nSelect role:\n";
+    cout << "1. Student\n";
+    cout << "2. Instructor\n";
+    cout << "3. Administrator\n";
+    cout << "Choice: ";
+    cin >> roleChoice;
+    
+    switch (roleChoice) {
+        case 1: newUser.role = "student"; break;
+        case 2: newUser.role = "instructor"; break;
+        case 3: newUser.role = "admin"; break;
+        default: newUser.role = "student";
+    }
+    
+    newUser.id = generateUniqueID();
+    
+    int count;
+    User* users = loadUsers(count);
+    
+    User* newUsers = new User[count + 1];
+    
+    for (int i = 0; i < count; i++) {
+        newUsers[i] = users[i];
+    }
+    
+    newUsers[count] = newUser;
+    
+    saveUsers(newUsers, count + 1);
+    
+    if (users != nullptr) delete[] users;
+    delete[] newUsers;
+    
+    currentUser = newUser;
+    
+    cout << "\n✓ Registration successful! Your ID is: " << newUser.id << "\n";
+    cout << "Please remember this ID for future logins.\n";
+}
+
+
+
+bool loginUser() {
+    int id;
+    string password;
+    
+    cout << "\n=== USER LOGIN ===\n";
+    cout << "Enter your ID: ";
+    cin >> id;
+    cout << "Enter your password: ";
+    cin >> password;
+    
+    string hashedPassword = hashPassword(password);
+    
+    int count;
+    User* users = loadUsers(count);
+    
+    if (users == nullptr) {
+        cout << "No users found!\n";
+        return false;
+    }
+    
+    for (int i = 0; i < count; i++) {
+        if (users[i].id == id && users[i].password == hashedPassword) {
+            currentUser = users[i];
+            delete[] users;
+            cout << "\n✓ Login successful! Welcome " << currentUser.firstName << "!\n";
+            return true;
+        }
+    }
+    
+    delete[] users;
+    cout << "\n✗ Invalid ID or password!\n";
+    return false;
+}
+
+
+
 int main() {
     
 }
