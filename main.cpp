@@ -196,7 +196,27 @@ Course* loadCourses(int& count) {
     return courses;
 }
  
-
+void saveCourses(Course* courses, int count) {
+    json j = json::array();
+    
+    for (int i = 0; i < count; i++) {
+        json courseObj;
+        courseObj["courseCode"] = courses[i].courseCode;
+        courseObj["courseName"] = courses[i].courseName;
+        
+        json instructorsArray = json::array();
+        for (int k = 0; k < courses[i].instructorCount; k++) {
+            instructorsArray.push_back(courses[i].instructorIDs[k]);
+        }
+        courseObj["instructorIDs"] = instructorsArray;
+        
+        j.push_back(courseObj);
+    }
+    
+    ofstream file(COURSES_FILE);
+    file << j.dump(4);
+    file.close();
+}
 
 int main() {
     
