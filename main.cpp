@@ -86,9 +86,28 @@ bool isValidPhone(const string& phone) {
 
 //id gen
 
-int generateUniqueID() {
-    return time(nullptr) % 1000000 + rand() % 10000;
+int findlastid() {
+    int count;
+    User* users = loadUsers(count);
+
+    if (users == nullptr) return 1000; 
+
+    int maxId = 0;
+    for (int i = 0; i < count; i++) {
+        if (users[i].id > maxId) {
+            maxId = users[i].id;
+        }
+    }
+
+    delete[] users;
+    return maxId;
 }
+
+int genID() {
+    return findlastid() + 1;
+}
+
+
 
 //user file manip
 
@@ -398,7 +417,7 @@ void registerUser() {
         default: newUser.role = "student";
     }
     
-    newUser.id = generateUniqueID();
+    newUser.id = genID();
     
     int count;
     User* users = loadUsers(count);
