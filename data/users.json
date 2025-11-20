@@ -1,0 +1,38 @@
+[
+    {
+        "email": "gioasmar23@gmail.com",
+        "firstName": "georges",
+        "id": 1001,
+        "lastName": "asmar",
+        "password": "9fbd410257ee098d",
+        "phone": "78804389",
+        "role": "admin"
+    },
+    {
+        "email": "gioasmar23@gmail.com",
+        "firstName": "jeremy",
+        "id": 1002,
+        "lastName": "akian",
+        "password": "ac25e9feaca68b46",
+        "phone": "03345543",
+        "role": "instructor"
+    },
+    {
+        "email": "gioasmar23@gmail.com",
+        "firstName": "test",
+        "id": 1003,
+        "lastName": "test",
+        "password": "933320d10ad714d",
+        "phone": "1371289731",
+        "role": "student"
+    },
+    {
+        "email": "gioasmar23@gmail.com",
+        "firstName": "test2",
+        "id": 1004,
+        "lastName": "test1",
+        "password": "933320d10ad714d",
+        "phone": "381937197",
+        "role": "student"
+    }
+]
