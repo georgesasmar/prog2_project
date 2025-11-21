@@ -21,6 +21,12 @@
         "courseCode": "PROG2",
         "grade": 30.0,
         "instructorID": 1002,
-        "studentID": 1004
+        "studentID": 1002
+    },
+    {
+        "courseCode": "CAL1",
+        "grade": 80.0,
+        "instructorID": 1002,
+        "studentID": 1003
     }
 ]

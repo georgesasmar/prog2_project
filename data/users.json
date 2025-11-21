@@ -34,5 +34,14 @@
         "password": "933320d10ad714d",
         "phone": "381937197",
         "role": "student"
+    },
+    {
+        "email": "fweihei@gfjeihfie.com",
+        "firstName": "jeremy",
+        "id": 1005,
+        "lastName": "zabrian",
+        "password": "ac25e9feaca68b46",
+        "phone": "78804389",
+        "role": "student"
     }
 ]
