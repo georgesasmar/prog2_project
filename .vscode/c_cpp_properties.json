@@ -4,18 +4,24 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:\\Program Files\\OpenSSL-Win64\\include"
+                "C:/Qt/6.10.1/mingw_64/include",
+                "C:/Qt/6.10.1/mingw_64/include/QtWidgets",
+                "C:/Qt/6.10.1/mingw_64/include/QtGui",
+                "C:/Qt/6.10.1/mingw_64/include/QtCore",
+                "C:/Qt/6.10.1/mingw_64/include/QtPrintSupport",
+                "C:/Qt/6.10.1/mingw_64/include/QtNetwork",
+                "C:/Qt/6.10.1/mingw_64/include/QtSql",
+                "C:/Qt/6.10.1/mingw_64/include/QtConcurrent"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "windowsSdkVersion": "10.0.22000.0",
-            "compilerPath": "cl.exe",
+            "compilerPath": "C:/Qt/6.10.1/mingw_64/bin//",
             "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "windows-msvc-x64"
+            "intelliSenseMode": "windows-gcc-x64"
         }
     ],
     "version": 4
