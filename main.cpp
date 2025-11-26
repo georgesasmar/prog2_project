@@ -90,17 +90,17 @@ bool isValidEmail(const string& email) {
 }
 
 bool isValidPhone(const string& phone) {
-    const regex pattern(R"(^[\d\s\+\-\(\)]{8,15}$)");
+    const regex pattern(R"(^\+961\d{7,8}$)");
     return regex_match(phone, pattern);
 }
 
 //id gen
 
-int findlastid() {
+int findLastId() {
     int count;
     User* users = loadUsers(count);
 
-    if (users == nullptr) return 1000; 
+    if (users == nullptr || count == 0) return 0;
 
     int maxId = 0;
     for (int i = 0; i < count; i++) {
@@ -114,7 +114,20 @@ int findlastid() {
 }
 
 int genID() {
-    return findlastid() + 1;
+  
+    time_t now = time(nullptr);
+    tm* localTime = localtime(&now);
+    int year = localTime->tm_year + 1900;
+
+    int lastId = findLastId();
+
+   
+    if (lastId / 10000 != year) {
+        return year * 10000 + 1;
+    }
+
+    
+    return lastId + 1;
 }
 
 
