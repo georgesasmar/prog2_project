@@ -6,10 +6,15 @@
 #include <cstdlib>
 #include <iomanip>
 #include <sstream>
+#include <windows.h>
+#include <conio.h> 
 #include "json.hpp"
+
 
 using namespace std;
 using json = nlohmann::json;
+//fix adding gradents for users that arent students
+//invisible password input
 
 //structs
 
@@ -59,6 +64,33 @@ User currentUser;
 User *loadUsers(int& count);
 
 //passwd functions
+
+string getPasswordInput() {
+    string password;
+    
+    HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+    DWORD mode;
+    GetConsoleMode(hStdin, &mode);
+    DWORD oldMode = mode;
+    mode &= ~ENABLE_ECHO_INPUT;  // Hide input
+    SetConsoleMode(hStdin, mode);
+    
+    char ch;
+    while ((ch = _getch()) != '\r') {  // Read until Enter
+        if (ch == '\b' && !password.empty()) {  // Backspace
+            password.pop_back();
+            cout << "\b \b";  // Erase char visually
+        } else if (ch != '\b') {
+            password += ch;
+            cout << '*';  // Show asterisk
+        }
+    }
+    
+    SetConsoleMode(hStdin, oldMode);  // Restore mode
+    cout << endl;
+    return password;
+}
+
 
 string hashPassword(const string& password) {
     hash<string> hasher;
@@ -392,7 +424,7 @@ void registerUser() {
     string password;
     do {
         cout << "Enter password (min 8 chars, must include numbers, letters, and special characters): ";
-        cin >> password;
+        password = getPasswordInput();
         
         if (!isValidPassword(password)) {
             cout << "Invalid password! Please try again.\n";
@@ -474,7 +506,7 @@ bool loginUser() {
     cout << "Enter your ID: ";
     cin >> id;
     cout << "Enter your password: ";
-    cin >> password;
+    password = getPasswordInput();
     
     string hashedPassword = hashPassword(password);
     
@@ -778,7 +810,7 @@ void generateCourseStats() {
         return;
     }
     
-    // Count unique students and calculate statistics for THIS COURSE
+  
     int* uniqueStudents = new int[gradeCount];
     int uniqueCount = 0;
     int passed = 0, failed = 0;
@@ -786,7 +818,7 @@ void generateCourseStats() {
     
     for (int i = 0; i < gradeCount; i++) {
         if (grades[i].courseCode == courseCode) {
-            // Check if student already counted
+            
             bool alreadyCounted = false;
             for (int j = 0; j < uniqueCount; j++) {
                 if (uniqueStudents[j] == grades[i].studentID) {
@@ -926,7 +958,7 @@ void generateStudentReport() {
                 studentGrades[j + 1] = temp;
             }
         }
-    }
+    }//check
     
     double sum = 0;
     int passed = 0, failed = 0;
@@ -985,11 +1017,24 @@ void addGrade() {
     cout << "Enter student ID: ";
     cin >> newGrade.studentID;
     
-    if (!userExists(newGrade.studentID)) {
-        cout << "✗ Student not found!\n";
+   int userCount;
+    User* allUsers = loadUsers(userCount);
+    bool isStudent = false;
+    for (int i = 0; i < userCount; i++) {
+        if (allUsers[i].id == newGrade.studentID && allUsers[i].role == "student") {
+            isStudent = true;
+            break;
+        }
+    }
+    delete[] allUsers;  
+
+    if (!isStudent) {
+        cout << "Error: User ID " << newGrade.studentID << " is not a student! Only students can receive grades." << endl;
         return;
     }
     
+
+
     cout << "Enter course code: ";
     cin >> newGrade.courseCode;
     

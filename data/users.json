@@ -1,56 +1,47 @@
 [
     {
-        "email": "gioasmar23@gmail.com",
+        "email": "test@gmail.com",
         "firstName": "georges",
-        "id": 20251001,
+        "id": 20250001,
         "lastName": "asmar",
         "password": "9fbd410257ee098d",
-        "phone": "78804389",
+        "phone": "+96178804389",
         "role": "admin"
     },
     {
-        "email": "gioasmar23@gmail.com",
-        "firstName": "jeremy",
-        "id": 20251002,
-        "lastName": "andekian",
-        "password": "ac25e9feaca68b46",
-        "phone": "03345543",
+        "email": "test@gmail.com",
+        "firstName": "instructor",
+        "id": 20250002,
+        "lastName": "1",
+        "password": "9fbd410257ee098d",
+        "phone": "+96178804389",
         "role": "instructor"
     },
     {
-        "email": "gioasmar23@gmail.com",
-        "firstName": "test",
-        "id": 20251003,
-        "lastName": "test",
-        "password": "933320d10ad714d",
-        "phone": "1371289731",
-        "role": "student"
+        "email": "test@gmail.com",
+        "firstName": "instructor",
+        "id": 20250003,
+        "lastName": "2",
+        "password": "9fbd410257ee098d",
+        "phone": "+96178804389",
+        "role": "instructor"
     },
     {
-        "email": "gioasmar23@gmail.com",
-        "firstName": "test2",
-        "id": 20251004,
-        "lastName": "test1",
-        "password": "933320d10ad714d",
-        "phone": "381937197",
-        "role": "student"
-    },
-    {
-        "email": "fweihei@gfjeihfie.com",
-        "firstName": "jeremy",
-        "id": 20251005,
-        "lastName": "zabrian",
-        "password": "ac25e9feaca68b46",
-        "phone": "78804389",
-        "role": "student"
-    },
-    {
-        "email": "gjeihfiehi@gmail.com",
-        "firstName": "test3",
-        "id": 20251006,
-        "lastName": "test",
+        "email": "fhiehf@gmail.com",
+        "firstName": "student",
+        "id": 20250004,
+        "lastName": "1",
         "password": "9fbd410257ee098d",
         "phone": "+96178804389",
         "role": "student"
+    },
+    {
+        "email": "genineihn@gjeijffie.com",
+        "firstName": "teacher",
+        "id": 20250005,
+        "lastName": "test",
+        "password": "933320d10ad714d",
+        "phone": "+9618393839",
+        "role": "instructor"
     }
 ]
