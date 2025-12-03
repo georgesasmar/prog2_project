@@ -1,1 +1,11 @@
-[]
+[
+    {
+        "email": "georges@gmail.com",
+        "firstName": "georges",
+        "id": 1001,
+        "lastName": "asmar",
+        "password": "9fbd410257ee098d",
+        "phone": "+96178804389",
+        "role": "instructor"
+    }
+]

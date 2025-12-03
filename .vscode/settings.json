@@ -2,6 +2,7 @@
     "workbench.colorTheme": "Default Dark+",
     "editor.fontFamily": "monocraft",
     "files.associations": {
-        "qgroupbox": "cpp"
+        "qgroupbox": "cpp",
+        "qlineedit": "cpp"
     }
 }

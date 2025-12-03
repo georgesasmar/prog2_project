@@ -1247,7 +1247,7 @@ return regex_match(email, pattern);
 }
 bool MainWindow::isValidPhone(const string& phone)
 {
-const regex pattern(R"(^[\d\s+-()]{8,15}$)");
+const regex pattern(R"(^\+961\d{7,8}$)");
 return regex_match(phone, pattern);
 }
 int MainWindow::findlastid()
