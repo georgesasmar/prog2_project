@@ -1,4 +1,7 @@
 {
     "workbench.colorTheme": "Default Dark+",
-    "editor.fontFamily": "monocraft"
+    "editor.fontFamily": "monocraft",
+    "files.associations": {
+        "qgroupbox": "cpp"
+    }
 }

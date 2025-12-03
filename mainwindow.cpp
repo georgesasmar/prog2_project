@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <fstream>
 #include <ctime>
+#include <QInputDialog>
 
 using json = nlohmann::json;
 

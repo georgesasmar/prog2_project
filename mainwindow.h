@@ -16,6 +16,7 @@
 #include <QMessageBox>
 #include <QGroupBox>
 #include <string>
+#include <QInputDialog>  
 #include "json.hpp"
 
 using namespace std;
