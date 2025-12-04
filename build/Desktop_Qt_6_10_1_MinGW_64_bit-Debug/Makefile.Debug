@@ -919,7 +919,17 @@ debug/mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		C:/Qt/6.10.1/mingw_64/include/QtWidgets/qapplication.h \
 		C:/Qt/6.10.1/mingw_64/include/QtGui/QScreen \
 		C:/Qt/6.10.1/mingw_64/include/QtWidgets/QScrollArea \
-		C:/Qt/6.10.1/mingw_64/include/QtWidgets/qscrollarea.h
+		C:/Qt/6.10.1/mingw_64/include/QtWidgets/qscrollarea.h \
+		C:/Qt/6.10.1/mingw_64/include/QtCore/QFileInfo \
+		C:/Qt/6.10.1/mingw_64/include/QtCore/qfileinfo.h \
+		C:/Qt/6.10.1/mingw_64/include/QtCore/qfile.h \
+		C:/Qt/6.10.1/mingw_64/include/QtCore/qfiledevice.h \
+		C:/Qt/6.10.1/mingw_64/include/QtCore/qdatetime.h \
+		C:/Qt/6.10.1/mingw_64/include/QtCore/qcalendar.h \
+		C:/Qt/6.10.1/mingw_64/include/QtCore/qtimezone.h \
+		C:/Qt/6.10.1/mingw_64/include/QtCore/QDir \
+		C:/Qt/6.10.1/mingw_64/include/QtCore/qdir.h \
+		C:/Qt/6.10.1/mingw_64/include/QtCore/qdirlisting.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mainwindow.o ..\..\mainwindow.cpp
 
 debug/moc_mainwindow.o: debug/moc_mainwindow.cpp 

@@ -1,0 +1,16 @@
+[
+    {
+        "courseCode": "CAL1",
+        "courseName": "calculus 1",
+        "instructorIDs": [
+            20250002
+        ]
+    },
+    {
+        "courseCode": "CAL2",
+        "courseName": "calculus 2",
+        "instructorIDs": [
+            20250002
+        ]
+    }
+]

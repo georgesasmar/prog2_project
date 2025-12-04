@@ -43,8 +43,8 @@ struct Course {
         if (instructorIDs != nullptr) {
             delete[] instructorIDs;
             instructorIDs = nullptr;
-        }
     }
+}
 };
 
 struct Grade {

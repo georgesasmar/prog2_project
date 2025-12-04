@@ -7,5 +7,59 @@
         "password": "9fbd410257ee098d",
         "phone": "+96178804389",
         "role": "instructor"
+    },
+    {
+        "email": "test@test.com",
+        "firstName": "student",
+        "id": 1002,
+        "lastName": "test",
+        "password": "933320d10ad714d",
+        "phone": "+96178804389",
+        "role": "student"
+    },
+    {
+        "email": "fefefe@test.com",
+        "firstName": "admin",
+        "id": 1003,
+        "lastName": "test",
+        "password": "499bb7dbab0d4b55",
+        "phone": "+96178804389",
+        "role": "admin"
+    },
+    {
+        "email": "fehiehiu@test.com",
+        "firstName": "admin",
+        "id": 1004,
+        "lastName": "test",
+        "password": "933320d10ad714d",
+        "phone": "+96178804389",
+        "role": "admin"
+    },
+    {
+        "email": "test@test.com",
+        "firstName": "teacher",
+        "id": 20250002,
+        "lastName": "test",
+        "password": "933320d10ad714d",
+        "phone": "+96178804389",
+        "role": "instructor"
+    },
+    {
+        "email": "test@test.com",
+        "firstName": "admin",
+        "id": 20250003,
+        "lastName": "test",
+        "password": "933320d10ad714d",
+        "phone": "+96178804389",
+        "role": "admin"
+    },
+    {
+        "email": "ahmaddoui6@gmail.com",
+        "firstName": "ahmad",
+        "id": 20250004,
+        "lastName": "doui",
+        "password": "9838a7ec6134589d",
+        "phone": "+9618116897",
+        "role": "student"
     }
 ]

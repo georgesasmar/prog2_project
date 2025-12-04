@@ -8,12 +8,38 @@
 #include <fstream>
 #include <ctime>
 #include <QInputDialog>
+#include <QFileInfo>
+#include <QDir>
 
 using json = nlohmann::json;
+
+void showFileLocation() {
+    QDir currentDir = QDir::current();
+    QString debugMsg = "=== FILE LOCATIONS ===\n\n";
+    debugMsg += "Working Directory:\n" + currentDir.absolutePath() + "\n\n";
+    debugMsg += "Data Folder:\n" + currentDir.absoluteFilePath("data") + "\n\n";
+    debugMsg += "Reports Folder:\n" + currentDir.absoluteFilePath("reports") + "\n\n";
+    
+    // Check if files exist
+    QFileInfo usersFile(currentDir.absoluteFilePath("data/users.json"));
+    QFileInfo coursesFile(currentDir.absoluteFilePath("data/courses.json"));
+    QFileInfo gradesFile(currentDir.absoluteFilePath("data/grades.json"));
+    
+    debugMsg += "users.json exists: " + QString(usersFile.exists() ? "YES" : "NO") + "\n";
+    debugMsg += "courses.json exists: " + QString(coursesFile.exists() ? "YES" : "NO") + "\n";
+    debugMsg += "grades.json exists: " + QString(gradesFile.exists() ? "YES" : "NO") + "\n\n";
+    
+    if (usersFile.exists()) {
+        debugMsg += "users.json full path:\n" + usersFile.absoluteFilePath();
+    }
+    
+    qDebug() << debugMsg;
+}
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    showFileLocation();
     setupUI();
     this->resize(900, 700);
     this->setWindowTitle("Student Grades Management System");
@@ -538,27 +564,43 @@ void MainWindow::onAddCourseClicked()
     int count = 0;
     
     while (getline(ss, token, ',')) {
+        // Trim whitespace
+        token.erase(0, token.find_first_not_of(" \t"));
+        token.erase(token.find_last_not_of(" \t") + 1);
+        
         if (!token.empty()) {
-            tempIDs[count++] = stoi(token);
+            try {
+                tempIDs[count++] = stoi(token);
+            } catch (...) {
+                QMessageBox::warning(this, "Error", "Invalid instructor ID format!");
+                return;
+            }
         }
     }
     
     newCourse.instructorCount = count;
-    newCourse.instructorIDs = new int[count];
-    for (int i = 0; i < count; i++) {
-        newCourse.instructorIDs[i] = tempIDs[i];
+    if (count > 0) {
+        newCourse.instructorIDs = new int[count];
+        for (int i = 0; i < count; i++) {
+            newCourse.instructorIDs[i] = tempIDs[i];
+        }
     }
     
-    // Load and save
+    // Load existing courses
     int courseCount;
     Course* courses = loadCourses(courseCount);
+    
+    // Create new array - FIXED: Don't use Course array directly
     Course* newCourses = new Course[courseCount + 1];
     
+    // Deep copy existing courses
     for (int i = 0; i < courseCount; i++) {
         newCourses[i].courseCode = courses[i].courseCode;
         newCourses[i].courseName = courses[i].courseName;
         newCourses[i].instructorCount = courses[i].instructorCount;
-        if (courses[i].instructorCount > 0) {
+        newCourses[i].instructorIDs = nullptr; // Initialize first
+        
+        if (courses[i].instructorCount > 0 && courses[i].instructorIDs != nullptr) {
             newCourses[i].instructorIDs = new int[courses[i].instructorCount];
             for (int k = 0; k < courses[i].instructorCount; k++) {
                 newCourses[i].instructorIDs[k] = courses[i].instructorIDs[k];
@@ -566,11 +608,46 @@ void MainWindow::onAddCourseClicked()
         }
     }
     
-    newCourses[courseCount] = newCourse;
+    // Add new course - deep copy
+    newCourses[courseCount].courseCode = newCourse.courseCode;
+    newCourses[courseCount].courseName = newCourse.courseName;
+    newCourses[courseCount].instructorCount = newCourse.instructorCount;
+    newCourses[courseCount].instructorIDs = nullptr; // Initialize
+    
+    if (newCourse.instructorCount > 0 && newCourse.instructorIDs != nullptr) {
+        newCourses[courseCount].instructorIDs = new int[newCourse.instructorCount];
+        for (int k = 0; k < newCourse.instructorCount; k++) {
+            newCourses[courseCount].instructorIDs[k] = newCourse.instructorIDs[k];
+        }
+    }
+    
+    // Save
     saveCourses(newCourses, courseCount + 1);
     
-    if (courses) delete[] courses;
+    // Cleanup - manually delete the instructorIDs arrays
+    if (courses) {
+        for (int i = 0; i < courseCount; i++) {
+            if (courses[i].instructorIDs) {
+                delete[] courses[i].instructorIDs;
+                courses[i].instructorIDs = nullptr;
+            }
+        }
+        delete[] courses;
+    }
+    
+    for (int i = 0; i <= courseCount; i++) {
+        if (newCourses[i].instructorIDs) {
+            delete[] newCourses[i].instructorIDs;
+            newCourses[i].instructorIDs = nullptr;
+        }
+    }
     delete[] newCourses;
+    
+    // Cleanup the temporary newCourse
+    if (newCourse.instructorIDs) {
+        delete[] newCourse.instructorIDs;
+        newCourse.instructorIDs = nullptr;
+    }
     
     adminCourseCodeEdit->clear();
     adminCourseNameEdit->clear();
@@ -894,6 +971,35 @@ if (!userExists(studentID)) {
     QMessageBox::warning(this, "Error", "Student not found!");
     return;
 }
+
+    int count;
+    User* users = loadUsers(count);
+    bool isStudent = false;
+    
+    if (users) {
+        for (int i = 0; i < count; i++) {
+            if (users[i].id == studentID) {
+                if (users[i].role == "student") {
+                    isStudent = true;
+                } else {
+                    delete[] users;
+                    QMessageBox::warning(this, "Error", 
+                        QString("User ID %1 is not a student!\nRole: %2")
+                        .arg(studentID)
+                        .arg(QString::fromStdString(users[i].role)));
+                    return;
+                }
+                break;
+            }
+        }
+        delete[] users;
+    }
+    
+    if (!isStudent) {
+        QMessageBox::warning(this, "Error", "Invalid student ID!");
+        return;
+    }
+
 
 if (!courseExists(courseCode)) {
     QMessageBox::warning(this, "Error", "Course not found!");
@@ -1252,19 +1358,38 @@ return regex_match(phone, pattern);
 }
 int MainWindow::findlastid()
 {
-int count;
-User* users = loadUsers(count);
-if (!users) return 1000;
-int maxId = 0;
-for (int i = 0; i < count; i++) {
-    if (users[i].id > maxId) maxId = users[i].id;
+    int count;
+    User* users = loadUsers(count);
+    
+   
+    time_t now = time(0);
+    tm* ltm = localtime(&now);
+    int currentYear = 1900 + ltm->tm_year;
+    int yearPrefix = currentYear * 10000; 
+    
+    if (!users) return yearPrefix + 1; 
+    
+    int maxId = yearPrefix; 
+    for (int i = 0; i < count; i++) {
+        
+        if (users[i].id >= yearPrefix && users[i].id < yearPrefix + 10000) {
+            if (users[i].id > maxId) {
+                maxId = users[i].id;
+            }
+        }
+    }
+    
+    delete[] users;
+    
+    
+    if (maxId == yearPrefix) return yearPrefix + 1;
+    
+    return maxId;
 }
-delete[] users;
-return maxId;
-}
+
 int MainWindow::genID()
 {
-return findlastid() + 1;
+    return findlastid() + 1;
 }
 void MainWindow::generatePDF_StudentReport(int studentID, const string& studentName,
 const string& email, const string& phone,
